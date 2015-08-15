@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{51B775DD-5013-4B3F-B5FF-F7DFD6EB69F8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RIOT</RootNamespace>
+    <AssemblyName>RIOT</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RiotSharp">
+      <HintPath>..\packages\RiotSharp.2.2.2\lib\net45\RiotSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\MySQLConn.cs" />
+    <Compile Include="Entries\ChampDetailRow.cs" />
+    <Compile Include="Entries\ItemDetailRow.cs" />
+    <Compile Include="Entries\ItemRow.cs" />
+    <Compile Include="Core\MatchWrapper.cs" />
+    <Compile Include="Entries\PlayerRow.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="champions.json" />
+    <None Include="items.json" />
+    <None Include="matches\5.11\NORMAL_5X5\BR.json" />
+    <None Include="matches\5.11\NORMAL_5X5\EUNE.json" />
+    <None Include="matches\5.11\NORMAL_5X5\EUW.json" />
+    <None Include="matches\5.11\NORMAL_5X5\KR.json" />
+    <None Include="matches\5.11\NORMAL_5X5\LAN.json" />
+    <None Include="matches\5.11\NORMAL_5X5\LAS.json" />
+    <None Include="matches\5.11\NORMAL_5X5\NA.json" />
+    <None Include="matches\5.11\NORMAL_5X5\OCE.json" />
+    <None Include="matches\5.11\NORMAL_5X5\RU.json" />
+    <None Include="matches\5.11\NORMAL_5X5\TR.json" />
+    <None Include="matches\5.11\RANKED_SOLO\BR.json" />
+    <None Include="matches\5.11\RANKED_SOLO\EUNE.json" />
+    <None Include="matches\5.11\RANKED_SOLO\EUW.json" />
+    <None Include="matches\5.11\RANKED_SOLO\KR.json" />
+    <None Include="matches\5.11\RANKED_SOLO\LAN.json" />
+    <None Include="matches\5.11\RANKED_SOLO\LAS.json" />
+    <None Include="matches\5.11\RANKED_SOLO\NA.json" />
+    <None Include="matches\5.11\RANKED_SOLO\OCE.json" />
+    <None Include="matches\5.11\RANKED_SOLO\RU.json" />
+    <None Include="matches\5.11\RANKED_SOLO\TR.json" />
+    <None Include="matches\5.14\NORMAL_5X5\BR.json" />
+    <None Include="matches\5.14\NORMAL_5X5\EUNE.json" />
+    <None Include="matches\5.14\NORMAL_5X5\EUW.json" />
+    <None Include="matches\5.14\NORMAL_5X5\KR.json" />
+    <None Include="matches\5.14\NORMAL_5X5\LAN.json" />
+    <None Include="matches\5.14\NORMAL_5X5\LAS.json" />
+    <None Include="matches\5.14\NORMAL_5X5\NA.json" />
+    <None Include="matches\5.14\NORMAL_5X5\OCE.json" />
+    <None Include="matches\5.14\NORMAL_5X5\RU.json" />
+    <None Include="matches\5.14\NORMAL_5X5\TR.json" />
+    <None Include="matches\5.14\RANKED_SOLO\BR.json" />
+    <None Include="matches\5.14\RANKED_SOLO\EUNE.json" />
+    <None Include="matches\5.14\RANKED_SOLO\EUW.json" />
+    <None Include="matches\5.14\RANKED_SOLO\KR.json" />
+    <None Include="matches\5.14\RANKED_SOLO\LAN.json" />
+    <None Include="matches\5.14\RANKED_SOLO\LAS.json" />
+    <None Include="matches\5.14\RANKED_SOLO\NA.json" />
+    <None Include="matches\5.14\RANKED_SOLO\OCE.json" />
+    <None Include="matches\5.14\RANKED_SOLO\RU.json" />
+    <None Include="matches\5.14\RANKED_SOLO\TR.json" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="key_file.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

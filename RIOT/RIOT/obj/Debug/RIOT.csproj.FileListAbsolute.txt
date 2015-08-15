@@ -1,0 +1,13 @@
+D:\Riot\RIOT\RIOT\bin\Debug\RIOT.exe.config
+D:\Riot\RIOT\RIOT\bin\Debug\RIOT.exe
+D:\Riot\RIOT\RIOT\bin\Debug\RIOT.pdb
+D:\Riot\RIOT\RIOT\bin\Debug\Newtonsoft.Json.dll
+D:\Riot\RIOT\RIOT\bin\Debug\RiotSharp.dll
+D:\Riot\RIOT\RIOT\bin\Debug\Newtonsoft.Json.xml
+D:\Riot\RIOT\RIOT\bin\Debug\RiotSharp.xml
+D:\Riot\RIOT\RIOT\obj\Debug\RIOT.csprojResolveAssemblyReference.cache
+D:\Riot\RIOT\RIOT\obj\Debug\RIOT.Form1.resources
+D:\Riot\RIOT\RIOT\obj\Debug\RIOT.Properties.Resources.resources
+D:\Riot\RIOT\RIOT\obj\Debug\RIOT.csproj.GenerateResource.Cache
+D:\Riot\RIOT\RIOT\obj\Debug\RIOT.exe
+D:\Riot\RIOT\RIOT\obj\Debug\RIOT.pdb
