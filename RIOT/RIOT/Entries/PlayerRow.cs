@@ -9,15 +9,17 @@ namespace RIOT
     public class PlayerRow
     {
         // Match info
-        string match_version;
-        long match_id;
-        string queue_type;
-        string region;
-        
+        public string match_version;
+        public long match_id;
+        public string queue_type;
+        public string region;
+        public long? summoner_id;
+        public string summoner_name = "";
+
         // General cham/summoner info
-        int champ_id;
+        public int champ_id;
         public int part_index;
-        bool is_winner;
+        public bool is_winner;
 
         // Battle stats
         long magic_damage_dealt;
@@ -42,6 +44,11 @@ namespace RIOT
             this.match_id = match_id;
             this.queue_type = queue_type;
             this.region = region;
+            if (ident.Player != null)
+            { 
+                this.summoner_id = ident.Player.SummonerId;
+                this.summoner_name = ident.Player.SummonerName;
+            }
 
             // Get participant and participant identity for this player
             RiotSharp.MatchEndpoint.ParticipantStats stat  = participant.Stats;
@@ -90,7 +97,13 @@ namespace RIOT
         }
 
         public string get_sql()
-        { 
+        {
+            string summoner_id_str = "";
+            if (this.summoner_id != null)
+            {
+                summoner_id_str = summoner_id.ToString();
+            }
+
             StringBuilder sb = new StringBuilder();
             sb.Append("(");
             sb.Append("'" + this.match_version + "', ");
@@ -99,7 +112,9 @@ namespace RIOT
             sb.Append("'" + this.region + "', ");
             sb.Append("'" + this.part_index + "', ");
             sb.Append("'" + this.champ_id + "', ");
-            sb.Append("'" + this.is_winner + "', ");
+
+            string temp = this.is_winner.ToString();
+            sb.Append("'" + temp + "', ");
             sb.Append("'" + this.damage_dealt + "', ");
             sb.Append("'" + this.damage_dealt_champs + "', ");
             sb.Append("'" + this.magic_damage_dealt + "', ");
@@ -109,7 +124,9 @@ namespace RIOT
             sb.Append("'" + this.gold_earned + "', ");
             sb.Append("'" + this.kills + "', ");
             sb.Append("'" + this.deaths + "', ");
-            sb.Append("'" + this.deaths + "'");
+            sb.Append("'" + this.deaths + "',");
+            sb.Append("'" + summoner_id_str + "', ");
+            sb.Append("'" + this.summoner_name + "'");
             sb.Append(")");
 
             return sb.ToString();

@@ -50,6 +50,11 @@
             // match_counter
             // 
             this.match_counter.Location = new System.Drawing.Point(156, 52);
+            this.match_counter.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.match_counter.Name = "match_counter";
             this.match_counter.ReadOnly = true;
             this.match_counter.Size = new System.Drawing.Size(106, 20);

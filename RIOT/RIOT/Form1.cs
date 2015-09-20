@@ -18,48 +18,43 @@ namespace RIOT
     public partial class Form1 : Form
     {
         RiotSharp.RiotApi api;
-        RiotSharp.StaticRiotApi staticApi;
 
         public Form1()
         {
             InitializeComponent();
-            match_counter.Increment = 1;
-            match_counter.Value = 0;
 
             string key = File.ReadAllText(@"D:\Riot\RIOT\RIOT\key_file.txt");
-
-            api = RiotApi.GetInstance(key);
-            staticApi = StaticRiotApi.GetInstance(key);
+            api = RiotApi.GetInstance(key, 3000, 180000);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //@"D:\Riot\RIOT\RIOT\matches\5.11\NORMAL_5X5\", @"D:\Riot\RIOT\RIOT\matches\5.11\RANKED_SOLO\BR.json",, @"D:\Riot\RIOT\RIOT\matches\5.14\RANKED_SOLO\BR.json
-            string[] folders = {@"D:\Riot\RIOT\RIOT\matches\5.14\NORMAL_5X5\"};
+            button1.Enabled = false;
+
+            string[] folders = {@"D:\Riot\RIOT\RIOT\matches\5.11\RANKED_SOLO\", @"D:\Riot\RIOT\RIOT\matches\5.14\RANKED_SOLO\", @"D:\Riot\RIOT\RIOT\matches\5.11\NORMAL_5X5\", @"D:\Riot\RIOT\RIOT\matches\5.14\NORMAL_5X5\"};
             var tuple_list = new List<Tuple<RiotSharp.Region, string>>();
-            
             foreach (string folder in folders)
             {
                 tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.br, folder + "BR.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.eune, folder + "EUNE.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.euw, folder + "EUW.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.kr, folder + "KR.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.lan, folder + "LAN.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.las, folder + "LAS.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.na, folder + "NA.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.oce, folder + "OCE.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.ru, folder + "RU.json"));
-                //tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.tr, folder + "TR.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.eune, folder + "EUNE.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.euw, folder + "EUW.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.kr, folder + "KR.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.lan, folder + "LAN.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.las, folder + "LAS.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.na, folder + "NA.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.oce, folder + "OCE.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.ru, folder + "RU.json"));
+                tuple_list.Add(new Tuple<RiotSharp.Region, string>(RiotSharp.Region.tr, folder + "TR.json"));
             };
 
-            var match_list = new List<MatchWrapper>();
-            long counter = 0;
+            //var region = RiotSharp.Region.na;
+            //string file_path = @"D:\Riot\RIOT\RIOT\matches\5.14\RANKED_SOLO\NA.json";
+
+            // This text is added only once to the file. 
             foreach (var tuple in tuple_list)
             {
                 var region = tuple.Item1;
                 string file_path = tuple.Item2;
-
-                // This text is added only once to the file. 
                 if (File.Exists(file_path))
                 {
                     // Open the file to read from. 
@@ -72,18 +67,11 @@ namespace RIOT
                         try
                         {
                             attempt_to_parse(region, match_id);
+                            //check_match(match_id);
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex.ToString());
-                        }
-                        finally
-                        {
-                            counter++;
-                            if (counter % 100 == 0)
-                            {
-                                Console.WriteLine("Counter: {0}", counter);
-                            }
                         }
                     }
                 }
@@ -92,33 +80,69 @@ namespace RIOT
                     Console.WriteLine("File {0} does not exist! Skipping.", file_path);
                 }
             }
-
-            Console.WriteLine(" FINISHED LOADING THE CURRENT BATCH ");
         }
 
-        public void attempt_to_parse(RiotSharp.Region region, long match_id, int attempt = 0)
+        private void check_match(long match_id)
         {
-            var match = api.GetMatch(region, match_id, true);
+            MySQLConn myConn = new MySQLConn();
+            string query = "select * from player_stats where match_id = '" + match_id + "'";
+            var cmd = new MySqlCommand(query, myConn.conn);
 
-            if (match == null && attempt < 5)
+            var reader = cmd.ExecuteReader();
+
+            if (!reader.HasRows)
             {
-                Console.WriteLine("Match {0} from {1} has failed {2} times!", match_id, region.ToString(), attempt);
+                Console.WriteLine(match_id);
+            }
+
+            myConn.conn.Close();
+        }
+        private void format_item_numbers()
+        {
+            MySQLConn myConn = new MySQLConn();
+            string query = "select version_diff_win_percent, total_diff, name, item_id from versions_item_num_diff";
+            var cmd = new MySqlCommand(query, myConn.conn);
+
+            var reader = cmd.ExecuteReader();
+
+            // {x: {0}, y:{1}, name:'{2}', marker:{ symbol: 'url(http://ddragon.leagueoflegends.com/cdn/5.2.1/img/item/{3})', width: 25, height: 25}}
+            if (reader.Read())
+            {
+                Console.WriteLine("{{x: {0}, y:{1}, name:'{2}', marker:{{ symbol: 'url(http://ddragon.leagueoflegends.com/cdn/5.2.1/img/item/{3}.png)', width: 25, height: 25}}}} , ", reader.GetDecimal("version_diff_win_percent"), reader.GetInt32("total_diff"), reader.GetString("name").Replace("'", ""), reader.GetInt32("item_id").ToString());
+                while (reader.Read())
+                {
+                    Console.WriteLine(" {{x: {0}, y:{1}, name:'{2}', marker:{{ symbol: 'url(http://ddragon.leagueoflegends.com/cdn/5.2.1/img/item/{3}.png)', width: 25, height: 25}}}} , ", reader.GetDecimal("version_diff_win_percent"), reader.GetInt32("total_diff"), reader.GetString("name").Replace("'", ""), reader.GetInt32("item_id").ToString());
+                }
+            }
+            myConn.conn.Close();
+        }
+
+        public async Task attempt_to_parse(RiotSharp.Region region, long match_id, int attempt = 0)
+        {
+            var match = await api.GetMatchAsync(region, match_id, true);
+
+            if (match == null && attempt < 10)
+            {
+                //Console.WriteLine("Match {0} from {1} has failed {2} times!", match_id, region.ToString(), attempt);
                 attempt++;
-                attempt_to_parse(region, match_id, attempt);
+                await Task.Delay(3000);
+                await attempt_to_parse(region, match_id, attempt);
                 return;
             }
             else if (match == null)
             {
-                Console.WriteLine("Failed to get match id {0} 5 times!", match_id);
+                Console.WriteLine("Failed to get match id {0} 10 times!", match_id);
                 return;
             }
 
             MatchWrapper wrapper = new MatchWrapper(match, region.ToString());
             send_player_info(wrapper.player_rows);
-            send_item_events(wrapper.item_rows_per_player);   
+            send_item_events(wrapper.item_rows_per_player);
+
+            match_counter.UpButton();
         }
 
-        private void send_player_info(List<PlayerRow> player_rows)
+        private void send_player_info(Dictionary<int , PlayerRow> player_rows)
         {
             MySQLConn myConn = new MySQLConn();
             string query = "insert into player_stats values ";
@@ -128,7 +152,8 @@ namespace RIOT
                 var player_r = player_rows[index];
                 if (index < player_rows.Count - 1)
                 {
-                    query += player_r.get_sql() + ",";
+                    string temp = player_r.get_sql() + ",";
+                    query += temp;
                 }
                 else
                 {
@@ -140,7 +165,6 @@ namespace RIOT
             cmd.ExecuteNonQuery();
             myConn.conn.Close();
         }
-
         private void send_item_events(Dictionary<int, List<ItemRow>> item_rows_per_player)
         {
             foreach (List<ItemRow> list in item_rows_per_player.Values)
@@ -169,6 +193,16 @@ namespace RIOT
 
         private void button2_Click(object sender, EventArgs e)
         {
+            format_item_numbers();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void load_items()
+        {
             string items_json = File.ReadAllText(@"D:\Riot\RIOT\RIOT\items.json");
             JObject o = JObject.Parse(items_json);
             var data = o["data"].Children<JProperty>();
@@ -184,11 +218,11 @@ namespace RIOT
                 ItemDetailRow idr = new ItemDetailRow(id, name, description, img);
                 idr.submit_to_db();
 
-                tags.ForEach( tag => idr.submit_tag_row(tag) );
+                tags.ForEach(tag => idr.submit_tag_row(tag));
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void load_champs()
         {
             string champs_json = File.ReadAllText(@"D:\Riot\RIOT\RIOT\champions.json");
             JObject o = JObject.Parse(champs_json);
