@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RIOT.Containers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,10 +17,11 @@ namespace RIOT
         public long? summoner_id;
         public string summoner_name = "";
 
-        // General cham/summoner info
+        // General champ/summoner info
         public int champ_id;
         public int part_index;
         public bool is_winner;
+        public RiotSharp.Lane lane;
 
         // Battle stats
         long magic_damage_dealt;
@@ -57,6 +59,7 @@ namespace RIOT
             this.champ_id = participant.ChampionId;
             this.part_index = participant.ParticipantId;
             this.is_winner = stat.Winner;
+            this.lane = participant.Timeline.Lane;
 
             // Battle stats
             this.magic_damage_dealt = stat.MagicDamageDealt;
@@ -79,9 +82,13 @@ namespace RIOT
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("Champion: {0}", champ_id);
+            sb.AppendFormat("Summoner ID (name): {0} ({1})", summoner_id, summoner_name);
+            sb.AppendLine();
+            sb.AppendFormat("Champion (name): {0} ({1})", champ_id, StaticData.champions[champ_id].name);
             sb.AppendLine();
             sb.AppendFormat("Did player win? {0}", is_winner);
+            sb.AppendLine(); 
+            sb.AppendFormat("Player lane: {0}", lane);
             sb.AppendLine(); 
             sb.AppendFormat("Total Damage Delt: {0} (Champs: {1})\n" +
                             "Magic Damage Delt: {2} (Champs: {3})\n" +

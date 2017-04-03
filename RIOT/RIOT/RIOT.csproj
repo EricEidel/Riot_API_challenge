@@ -80,7 +80,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChampDetailRow.cs" />
+    <Compile Include="Containers\ChampDetailRow.cs" />
+    <Compile Include="Containers\Champion.cs" />
+    <Compile Include="Containers\Item.cs" />
+    <Compile Include="Containers\StaticData.cs" />
     <Compile Include="Core\MySQLConn.cs" />
     <Compile Include="Core\MatchWrapper.cs" />
     <Compile Include="Form1.cs">
@@ -89,9 +92,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ItemDetailRow.cs" />
-    <Compile Include="ItemRow.cs" />
-    <Compile Include="PlayerRow.cs" />
+    <Compile Include="Containers\ItemDetailRow.cs" />
+    <Compile Include="Containers\ItemRow.cs" />
+    <Compile Include="Containers\PlayerRow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
