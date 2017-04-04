@@ -24,6 +24,8 @@ namespace RIOT
     {
         RiotSharp.RiotApi api;
 
+        DateTime cutoff_timestamp = DateTimeOffset.FromUnixTimeMilliseconds(1490054400000).DateTime; // 21th of March 2017, patch 7.6
+
         public Form1()
         {
             InitializeComponent();
@@ -33,20 +35,46 @@ namespace RIOT
             string key = File.ReadAllText(@"key_file.txt");
             api = RiotApi.GetInstance(key);
         }
+       
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var region = RiotSharp.Region.na;
+            long summoner_id = 24727186; // ThuluTheAmazing
+
+            get_matches_for_summoner_id(region, summoner_id);
+        }
+
+        public void get_matches_for_summoner_id(RiotSharp.Region region, long summoner_id, int attempt = 0)
+        {
+            var match_list = api.GetMatchList(region, summoner_id);
+
+            int index = 0;
+            var match = match_list.Matches[index];
+
+            while (match.Timestamp > cutoff_timestamp)
+            {
+                Console.WriteLine("Match timestamp: {0} , Match ID: {1}", match.Timestamp, match.MatchID);
+
+                index++;
+                match = match_list.Matches[index];
+            }
+
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
             var region = RiotSharp.Region.na;
-            attempt_to_parse(region, 2453622993);           
+            parse_match(region, 2465557406);
+            parse_match(region, 2464714106);
+            parse_match(region, 2463850080);
         }
 
-        public void attempt_to_parse(RiotSharp.Region region, long match_id, int attempt = 0)
+        public void parse_match(RiotSharp.Region region, long match_id, int attempt = 0)
         {
             var match = api.GetMatch(region, match_id, true);
 
             MatchWrapper wrapper = new MatchWrapper(match, region.ToString());
             Console.WriteLine(wrapper.ToString());
         }
-
     }
 }

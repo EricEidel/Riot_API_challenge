@@ -39,6 +39,10 @@ namespace RIOT
         long deaths;
         long assists;
 
+        // Wards
+        long wards_killed;
+        long wards_placed;
+
         public PlayerRow(string match_version, long match_id, string region, string queue_type, RiotSharp.MatchEndpoint.Participant participant, RiotSharp.MatchEndpoint.ParticipantIdentity ident)
         {
             // Match info
@@ -76,6 +80,10 @@ namespace RIOT
             this.kills = stat.Kills;
             this.deaths = stat.Deaths;
             this.assists = stat.Assists;
+
+            // Wards
+            this.wards_killed = stat.WardsKilled;
+            this.wards_placed = stat.WardsPlaced;
         }
 
         public override string ToString()
@@ -98,6 +106,8 @@ namespace RIOT
             sb.AppendFormat("Gold: {0}, CS: {1}", gold_earned, minions_killed);
             sb.AppendLine();
             sb.AppendFormat("K: {0}, D: {1}, A: {2}", kills, deaths, assists);
+            sb.AppendLine(); 
+            sb.AppendFormat("Wards (Placed/Killed): {0} / {1}", wards_placed, wards_killed);
             sb.AppendLine();
 
             return sb.ToString();

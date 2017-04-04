@@ -15,9 +15,11 @@ namespace RIOT
         string queue_type;
         string region;
         string version;
+        public DateTime timestamp;
 
         public MatchWrapper(RiotSharp.MatchEndpoint.MatchDetail match, string region)
         {
+            this.timestamp = match.MatchCreation;
             this.match_id = match.MatchId;
             this.queue_type = match.QueueType.ToString();
             this.region = region;
@@ -37,7 +39,8 @@ namespace RIOT
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("Match ID: {0}, Queue Type: {1}, Region: {2}, Version: {3}", match_id, queue_type, region, version);
+            sb.AppendFormat("Match ID: {0}, Queue Type: {1}, Region: {2}, Version: {3}, Creation time: {4}", match_id, queue_type, region, version, timestamp);
+            
             sb.AppendLine();
 
             foreach (PlayerRow p_row in player_rows.Values)
